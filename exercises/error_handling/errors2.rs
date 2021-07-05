@@ -16,14 +16,14 @@
 // There are at least two ways to implement this that are both correct-- but
 // one is a lot shorter! Execute `rustlings hint errors2` for hints to both ways.
 
-// I AM NOT DONE
-
 use std::num::ParseIntError;
 
+#[feature(int_error_matching)]
 pub fn total_cost(item_quantity: &str) -> Result<i32, ParseIntError> {
     let processing_fee = 1;
     let cost_per_item = 5;
-    let qty = item_quantity.parse::<i32>();
+
+    let qty = item_quantity.parse::<i32>()?;
 
     Ok(qty * cost_per_item + processing_fee)
 }
@@ -42,6 +42,14 @@ mod tests {
         assert_eq!(
             total_cost("beep boop").unwrap_err().to_string(),
             "invalid digit found in string"
+        );
+    }
+
+    #[test]
+    fn item_quantity_is_empty() {
+        assert_eq!(
+            total_cost("").unwrap_err().to_string(),
+            "cannot parse integer from empty string"
         );
     }
 }
